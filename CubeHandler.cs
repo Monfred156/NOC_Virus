@@ -75,32 +75,10 @@ public class CubeHandler : MonoBehaviour
 
         foreach (var contaminatedCube in contaminatedCubes)
         {
-            int i = 0;
+            var i = 0;
             foreach (var cube in _subCube.ToArray())
             {
-                var tmpCube = cube;
-                if ((tmpCube.Position.x - _spaceBetweenSubCube == contaminatedCube.Position.x || tmpCube.Position.x + _spaceBetweenSubCube == contaminatedCube.Position.x)
-                    && tmpCube.Position.y == contaminatedCube.Position.y && tmpCube.Position.z == contaminatedCube.Position.z)
-                {
-                    _subCube[i] = new Cube{
-                        Contaminated = true,
-                        GameObject = _subCube[i].GameObject,
-                        Position = _subCube[i].Position
-                    };
-                    _subCube[i].GameObject.GetComponent<MeshRenderer>().material = contaminatedMaterial;
-                }
-                if ((tmpCube.Position.y - _spaceBetweenSubCube == contaminatedCube.Position.y || tmpCube.Position.y + _spaceBetweenSubCube == contaminatedCube.Position.y)
-                    && tmpCube.Position.x == contaminatedCube.Position.x && tmpCube.Position.z == contaminatedCube.Position.z)
-                {
-                    _subCube[i] = new Cube{
-                        Contaminated = true,
-                        GameObject = _subCube[i].GameObject,
-                        Position = _subCube[i].Position
-                    };
-                    _subCube[i].GameObject.GetComponent<MeshRenderer>().material = contaminatedMaterial;
-                }
-                if ((tmpCube.Position.z - _spaceBetweenSubCube == contaminatedCube.Position.z || tmpCube.Position.z + _spaceBetweenSubCube == contaminatedCube.Position.z)
-                    && tmpCube.Position.x == contaminatedCube.Position.x && tmpCube.Position.y == contaminatedCube.Position.y)
+                if (Vector3.Distance(cube.Position, contaminatedCube.Position) == _spaceBetweenSubCube)
                 {
                     _subCube[i] = new Cube{
                         Contaminated = true,
@@ -112,7 +90,6 @@ public class CubeHandler : MonoBehaviour
                 i++;
             }
         }
-
         _iteration++;
         _percentageOfContamination = _subCube.Where(cube => cube.Contaminated).ToList().Count * 100.0f / _subCube.Count;
         iterationText.text = "Iteration: " + _iteration;
